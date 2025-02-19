@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_DIR = "/root/python-flask-app"
+        REPO_URL = "https://github.com/Suneel-717/python-flask-app.git"
+        BRANCH = "main"
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                script {
+                    sh "rm -rf ${APP_DIR}"  // Remove old code
+                    sh "git clone -b ${BRANCH} ${REPO_URL} ${APP_DIR}"
+                }
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    sh """
+                        cd ${APP_DIR}
+                        python3 -m venv venv
+                        source venv/bin/activate
+                        pip install --upgrade pip
+                        pip install -r requirements.txt
+                    """
+                }
+            }
+        }
+
+        stage('Run Security Scan') {
+            steps {
+                script {
+                    sh "pip install bandit"
+                    sh "bandit -r ${APP_DIR}"
+                }
+            }
+        }
+
+        stage('Deploy Application') {
+            steps {
+                script {
+                    sh """
+                        cd ${APP_DIR}
+                        source venv/bin/activate
+                        nohup python3 app.py > app.log 2>&1 &
+                    """
+                }
+            }
+        }
+    }
+}
