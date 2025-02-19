@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        APP_DIR = "/root/python-flask-ssspp"
+        APP_DIR = "/root/python-flask-app"
         REPO_URL = "https://github.com/Suneel-717/python-flask-app.git"
         BRANCH = "main"
     }
