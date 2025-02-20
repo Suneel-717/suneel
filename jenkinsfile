@@ -18,20 +18,16 @@ pipeline {
         }
 
         stage('Install Dependencies') {
-    steps {
-        script {
-            sh """
-                cd ${APP_DIR}
-                sudo alternatives --set python3 /usr/bin/python3.9  # Ensure Python 3.9 is used
-                python3 -m venv venv
-                source venv/bin/activate
-                pip install --upgrade pip
-                pip install -r requirements.txt
-            """
-        }
-    }
-}
-
+            steps {
+                script {
+                    sh """
+                        cd ${APP_DIR}
+                        sudo alternatives --set python3 /usr/bin/python3.9  # Ensure Python 3.9 is used
+                        python3 -m venv venv
+                        source venv/bin/activate
+                        pip install --upgrade pip
+                        pip install -r requirements.txt
+                    """
                 }
             }
         }
@@ -59,7 +55,9 @@ pipeline {
                 }
             }
         }
-    }
-}
+    }  // Closing bracket for 'stages'
+}  // Closing bracket for 'pipeline'
+
+
 
 
